@@ -33,7 +33,7 @@ exports.missingassetchecker = {
       url: 'http://dummyurl:9000/'
     },
     function (err, stdout, stderr) {
-        test.ok(stdout.indexOf('FAIL to load the address')>=0 , 'phantom communication is ok');
+        test.ok(err == null && stdout != null , 'phantom communication is ok');
         test.done();
     });
   },
