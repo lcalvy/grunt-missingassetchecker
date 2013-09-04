@@ -1,6 +1,6 @@
 # grunt-missingassetchecker
 
-> Check if app is missing assets ou assets is not avalaible. Could configure status codes to check (40x,50x)
+> Check if app is missing assets or assets is not available. Task can be configured to check different kind of problems : javascript error, network error or console message
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
@@ -37,53 +37,71 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.url
 Type: `String`
-Default value: `',  '`
+Default value: `'http://localhost:9000`
 
-A string value that is used to do something with whatever.
+A string value that is used to start browsing and check for errors
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.issues
+Type: `Array`
+Default value: `['networkerror','javascripterror','console']`
 
-A string value that is used to do something else with whatever else.
+An array of values that launch different kinds of tests.
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example, the default options are used to test localhost server on port 9000 checking if assets are missing, javascript error occured or debug message are present in console.
 
 ```js
 grunt.initConfig({
   missingassetchecker: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      options: {
+        issues : ["javascripterror","networkerror","console"]
+      },
+      home: {
+        options: {
+          url: 'http://localhost:9000/',
+          
+        },
+      }
     },
-  },
 })
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+In this example, custom options are used to test only network errors on pages and javascripterror on another page.
 
 ```js
 grunt.initConfig({
   missingassetchecker: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      options: {
+        issues : ["networkerror"]
+      },
+      home: {
+        options: {
+          url: 'http://localhost:9000/',
+          
+        },
+      },
+      javascripterror: {
+        options: {
+          url: 'http://localhost:9000/javascripterror.html',
+          issues : ["javascripterror"]
+          
+        },
+      },
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
 })
 ```
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+Please fill to contribute in master branch and pull request updates or fixes.
 
 ## Release History
-_(Nothing yet)_
+0.1.1
+Description fix
+
+0.1.0
+First release

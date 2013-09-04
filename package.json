@@ -1,7 +1,7 @@
 {
   "name": "grunt-missingassetchecker",
-  "description": "CHeck if app is missing assets ou assets is not avalaible. Could configure status codes to check (40x,50x)",
-  "version": "0.1.0",
+  "description": "Grunt task checking if web application is missing assets or assets is not available.",
+  "version": "0.1.1",
   "homepage": "https://github.com/lcalvy/grunt-missingassetchecker",
   "author": {
     "name": "Loic Calvy",
@@ -32,9 +32,9 @@
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt": "~0.4.1",
-    "phantomjs": "~1.9.1-8",
-    "phantom": "~0.5.2",
-    "node-phantom": "~0.2.3"
+    "node-phantom": "~0.2.3",
+    "grunt-express-server": "~0.4.3",
+    "express": "~3.3.8"
   },
   "peerDependencies": {
     "grunt": "~0.4.1"

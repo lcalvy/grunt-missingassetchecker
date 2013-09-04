@@ -29,9 +29,9 @@ page.onError = function(msg, trace) {
 
 page.onResourceReceived = function (response) {
 	
-    if(response.status >=400 && response.status <600 && response.stage == "start"){
+    if(response.status >=400 && response.status <600 && response.stage === "start"){
 		console.error("NETWORK ERROR: Receive failed", response.status, "on request url",response.url);
-    };
+    }
     
 };
 

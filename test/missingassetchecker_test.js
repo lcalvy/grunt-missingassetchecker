@@ -1,7 +1,8 @@
 'use strict';
 
 var grunt = require('grunt');
-
+var phantomlauncher = require('../lib/phantomlauncher.js').init(grunt);
+var stdparser = require('../lib/stdparser.js').init(grunt);
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -22,35 +23,67 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
+
+
 exports.missingassetchecker = {
   test_phantomcommunication: function(test) {
     test.expect(1);
-
-    var Phantom = require('../lib/phantomlauncher.js');
-    var phantom = new Phantom();
-    phantom.launch(
+    
+    phantomlauncher.launch(
     {
       url: 'http://dummyurl:9000/'
     },
     function (err, stdout, stderr) {
-        test.ok(err == null && stdout != null , 'phantom communication is ok');
+        test.ok(!err, 'phantom communication is ok');
         test.done();
     });
   },
   test_allnetworksressourceok: function(test) {
-    test.expect(1);
+    test.expect(2);
 
-    var Phantom = require('../lib/phantomlauncher.js');
-    var phantom = new Phantom();
-    phantom.launch(
+    phantomlauncher.launch(
     {
-      url: 'http://localhost:9000/'
+      url: 'http://localhost:9999/noproblem.html'
     },
     function (err, stdout, stderr) {
-        console.log('******',err,'*****');
-        console.log('******',stdout,'*****');
-        console.log('******',stderr,'*****');
-        test.ok(err === null && stderr === '', 'all network ressources are available');
+        test.ok(stdout === 'success' , 'url connected');
+        test.ok(stderr.length === 0 , 'all network ressources are available');
+        test.done();
+    });
+  },
+  test_missingnetworksressource: function(test) {
+    test.expect(1);
+
+    phantomlauncher.launch(
+    {
+      url: 'http://localhost:9999/missingasset.html'
+    },
+    function (err, stdout, stderr) {
+        test.ok(stdparser.containshttpstatus(stderr,404), 'one missing network ressources');
+        test.done();
+    });
+  },
+  test_javascripterror: function(test) {
+    test.expect(1);
+
+    phantomlauncher.launch(
+    {
+      url: 'http://localhost:9999/javascripterror.html'
+    },
+    function (err, stdout, stderr) {
+        test.ok(stdparser.containstype(stderr,"javascripterror"), 'one javascript error');
+        test.done();
+    });
+  },
+  test_console: function(test) {
+    test.expect(1);
+
+    phantomlauncher.launch(
+    {
+      url: 'http://localhost:9999/console.html'
+    },
+    function (err, stdout, stderr) {
+        test.ok(stdparser.containstype(stderr,"console"), 'one console message found');
         test.done();
     });
   }

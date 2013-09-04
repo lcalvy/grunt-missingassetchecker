@@ -15,6 +15,7 @@ module.exports = function(grunt) {
     jshint: {
       all: [
         'Gruntfile.js',
+        'lib/*.js',
         'tasks/*.js',
         '<%= nodeunit.tests %>',
       ],
@@ -30,20 +31,20 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     missingassetchecker: {
-      default_options: {
+      options: {
+        issues : ["javascripterror","networkerror"]
+      },
+      home: {
         options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
+          url: 'http://localhost:9000/',
+          
         },
       },
-      custom_options: {
+      javascripterror: {
         options: {
-          separator: ': ',
-          punctuation: ' !!!',
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
+          url: 'http://localhost:9000/javascripterror.html',
+          issues : ["javascripterror"]
+          
         },
       },
     },
@@ -52,6 +53,18 @@ module.exports = function(grunt) {
     nodeunit: {
       tests: ['test/*_test.js'],
     },
+
+    express: {
+        options: {
+            port: 9999,
+            background: true
+        },
+        test : {
+          options: {
+            script: 'test/server.js'
+            }
+        }
+    }
 
   });
 
@@ -62,10 +75,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-express-server');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'missingassetchecker', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'express:test', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
