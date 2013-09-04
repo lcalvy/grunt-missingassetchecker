@@ -100,6 +100,9 @@ grunt.initConfig({
 Please fill to contribute in master branch and pull request updates or fixes.
 
 ## Release History
+0.1.2
+Fix dependency to node-phantom
+
 0.1.1
 Description fix
 
