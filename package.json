@@ -42,6 +42,9 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "node-phantom": "~0.2.3"
+    "async": "^0.9.0",
+    "path": "^0.11.14",
+    "phantom": "^0.7.2",
+    "q": "^1.4.0"
   }
 }
