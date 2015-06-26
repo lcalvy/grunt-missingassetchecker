@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
 
-    grunt.registerMultiTask('missingassetchecker', 'Check if app is missing assets or assets are not avalaible.', function () {
+    grunt.registerMultiTask('missingassetchecker', 'Check if app is missing assets or assets are not available.', function () {
         var done = this.async();
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
@@ -41,13 +41,13 @@ module.exports = function (grunt) {
                     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
                     viewportSize: { width: 1280, height: 1024 }
                 }
-            },
+            }
         });
 
         // backward compatibility for "url" parameter
         if (options.url) {
             options.urls = [options.url];
-            grunt.option('urls', options.urls);
+            //grunt.option('urls', options.urls);
         }
 
         var phantomlauncher = require('../lib/phantomlauncher.js').init(grunt);
