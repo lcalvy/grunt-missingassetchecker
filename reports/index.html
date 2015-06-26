@@ -52,7 +52,7 @@
                     var pageGroups, issueGroups;
                     window._report = data;
 
-                    if (data.issues.length) {
+                    if (data.issues.length || data.abortedRequests.length) {
                         pageGroups = _.groupBy(data.issues, function (issue) {
                             return issue.pageUrl;
                         });

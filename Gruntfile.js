@@ -44,14 +44,19 @@ module.exports = function (grunt) {
             home: {
                 options: {
                     url: 'http://localhost:9000/',
-
                 },
+            },
+            google: {
+                options: {
+                    url: 'https://google.com',
+                    "report": './report/',
+                    "screenshots": './report/screenshots/'
+                }
             },
             javascripterror: {
                 options: {
                     url: 'http://localhost:9000/javascripterror.html',
                     issues: ["javascripterror"]
-
                 },
             },
         },
