@@ -127,12 +127,9 @@ module.exports = function (grunt) {
             //var isOk = resolvedWith.reduce(function (previousValue, currentValue) {
             //    return previousValue && currentValue
             //});
+            grunt.log.writeln('Total issues found:' + rollUpReportData.issues.length);
+            grunt.log.writeln('Failure threshold:' + options.failThreshold);
             isOk = (rollUpReportData.issues.length <= options.failThreshold);
-
-            if (!isOk) {
-                grunt.log.writeln('Total issues found:' + rollUpReportData.issues.length);
-                grunt.log.writeln('Failure threshold:' + options.failThreshold);
-            }
             done(isOk);
         }, function (err) {
             grunt.fail.fatal('Something went wrong: ' + err);
