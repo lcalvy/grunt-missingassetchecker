@@ -48,7 +48,7 @@ module.exports = function (grunt) {
             },
             google: {
                 options: {
-                    url: 'https://google.com',
+                    url: 'https://google.com/',
                     "report": './report/',
                     "screenshots": './report/screenshots/'
                 }

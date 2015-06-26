@@ -24,6 +24,7 @@ module.exports = function (grunt) {
             url: undefined, // @deprecated
             urls: ['https://www.google.com/'],
             issues: ['networkerror', 'javascripterror', 'console'],
+            failThreshold: 0,
             resourceFilter: function (resourceUrl) {
                 return true;
             },
@@ -92,7 +93,7 @@ module.exports = function (grunt) {
                             grunt.log.error(JSON.stringify(item));
                             rollUpReportData.issues.push(item);
                         });
-                        isOK = false;
+                        isOK = isOK && false;
                     }
                 }
                 rollUpReportData.abortedRequests = rollUpReportData.abortedRequests.concat(abortedRequests);
@@ -112,6 +113,7 @@ module.exports = function (grunt) {
         });
 
         Q.all(promises).then(function (resolvedWith) {
+            var isOk;
             grunt.log.ok('Done testing of ' +  resolvedWith.length + ' URLs');
             rollUpReportData.date = new Date();
 
@@ -122,9 +124,15 @@ module.exports = function (grunt) {
                 grunt.file.write(path.join(process.cwd(), options.report, 'report.json'), JSON.stringify(rollUpReportData));
             }
             // calculating common isOk for all promises
-            var isOk = resolvedWith.reduce(function (previousValue, currentValue) {
-                return previousValue && currentValue
-            });
+            //var isOk = resolvedWith.reduce(function (previousValue, currentValue) {
+            //    return previousValue && currentValue
+            //});
+            isOk = (rollUpReportData.issues.length <= options.failThreshold);
+
+            if (!isOk) {
+                grunt.log.writeln('Total issues found:' + rollUpReportData.issues.length);
+                grunt.log.writeln('Failure threshold:' + options.failThreshold);
+            }
             done(isOk);
         }, function (err) {
             grunt.fail.fatal('Something went wrong: ' + err);
