@@ -1,7 +1,7 @@
 var express = require("express"),
     http = require("http"),
     path = require("path"),
-    app = express()
+    app = express();
 
 app.set('port', 9999);
 app.use(express.bodyParser());

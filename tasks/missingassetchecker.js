@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 },
                 settings: {
                     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                    viewportSize: { width: 1280, height: 1024 }
+                    viewportSize: {width: 1280, height: 1024}
                 }
             }
         });
@@ -48,7 +48,6 @@ module.exports = function (grunt) {
         // backward compatibility for "url" parameter
         if (options.url) {
             options.urls = [options.url];
-            //grunt.option('urls', options.urls);
         }
 
         var phantomlauncher = require('../lib/phantomlauncher.js').init(grunt);
@@ -71,17 +70,10 @@ module.exports = function (grunt) {
 
         var q = async.queue(function (task, callback) {
             grunt.log.subhead('Starting missingassetchecker to', task.pageUrl);
-            phantomlauncher.launch(options, task.pageUrl, function (err, stdout, stderr, abortedRequests) {
-                grunt.verbose.writeln("err :", JSON.stringify(err, null, '\t'));
+            phantomlauncher.launch(options, task.pageUrl, function (stdout, stderr, abortedRequests) {
                 grunt.verbose.writeln("stdout :", JSON.stringify(stdout, null, '\t'));
                 grunt.verbose.writeln("stderr :", JSON.stringify(stderr, null, '\t'));
                 var isOK = true;
-                if (err) {
-                    grunt.fail.fatal("Unable to contact phantomjs");
-                    grunt.verbose.error(err);
-                    done(false);
-                    return;
-                }
                 grunt.verbose.writeln("*********", stdout, "to contact", task.pageUrl);
 
                 for (var i = (options.issues).length - 1; i >= 0; i--) {
@@ -89,10 +81,12 @@ module.exports = function (grunt) {
                     var type = options.issues[i];
                     if (stdparser.containstype(stderr, type)) {
                         grunt.log.error("An issues of type " + type + " was found for " + task.pageUrl);
-                        stdparser.gettype(stderr, type).forEach(function (item, i) {
+                        /* jshint -W083 */
+                        stdparser.gettype(stderr, type).forEach(function (item) {
                             grunt.log.error(JSON.stringify(item));
                             rollUpReportData.issues.push(item);
                         });
+                        /* jshint +W083 */
                         isOK = isOK && false;
                     }
                 }
@@ -101,7 +95,6 @@ module.exports = function (grunt) {
                 task.deferred.resolve(isOK);
             });
         }, options.phantom.maxOpenPages);
-
 
 
         options.urls.forEach(function (pageUrl) {
@@ -114,7 +107,7 @@ module.exports = function (grunt) {
 
         Q.all(promises).then(function (resolvedWith) {
             var isOk;
-            grunt.log.ok('Done testing of ' +  resolvedWith.length + ' URLs');
+            grunt.log.ok('Done testing of ' + resolvedWith.length + ' URLs');
             rollUpReportData.date = new Date();
 
             if (options.report) {

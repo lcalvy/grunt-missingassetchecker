@@ -58,20 +58,20 @@ exports.stdparser = {
     test.ok(!stdparser.containsmessage(std,"bip"),"should not contains a bip message");
     test.done();
   },
-  test_containshttpstatus: function(test) {
+  test_containserrcode: function(test) {
     test.expect(1);
 
-    var std = [{type:"networkerror", status : 404}];
+    var std = [{type:"networkerror", errorCode : 203}];
 
-    test.ok(stdparser.containshttpstatus(std,404),"should contains a 404 network error");
+    test.ok(stdparser.containserrcode(std,203),"should contain a 203 network error");
     test.done();
   },
-  test_notcontainshttpstatus: function(test) {
+  test_notcontainserrcode: function(test) {
     test.expect(1);
 
-    var std = [{type:"networkerror", status : 404}];
+    var std = [{type:"networkerror", errorCode : 203}];
 
-    test.ok(!stdparser.containshttpstatus(std,500),"should not contains a 500 network error");
+    test.ok(!stdparser.containserrcode(std,204),"should not contain a 204 network error");
     test.done();
   }
 };
