@@ -100,7 +100,7 @@ grunt.initConfig({
  - **failThreshold** - grunt task won't fail if number of found issues is less then specified threshold
  - **report** - directory where HTML + JSON reports will be saved
  - **screenshots** - directory where screenshots for each analyzed URL will be saved
- - **resourceFilter** - filter function, which is executed for each requested asset on the page. It can be used, i.e. if you need to avoid certain requests (i.e. web analytics, etc). 
+ - **resourceFilter** - filter function, which is executed for each requested asset on the page. It can be used, i.e. if you need to abort certain requests (i.e. web analytics, etc). 
  - **phantom** - configuration for phantomjs (UA, max number of open URLs,  CLI options). Please see above configuration, all parameters are self-explanatory.
 
 
