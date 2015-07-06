@@ -108,7 +108,7 @@ grunt.initConfig({
 Gruntmissingassetchecker opens each URL in the Phantomjs (headless Webkit browser), captures all resource errors using onResourceError handler from PhantomJS API. List of captured errors is then being passed back to the grunt task, which in turn generates JSON report + HTML report. 
 
 ## Contributing
-Please fill to contribute in master branch and pull request updates or fixes.
+Please feel free to contribute in master branch and pull request updates or fixes.
 
 ## Release History
 0.2.0
