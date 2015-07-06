@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Missing assets report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.8.0/lodash.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <style>
+        .status {
+            color: red;
+        }
+
+        .question {
+            cursor: help;
+        }
+
+        .table-small {
+            width: 350px;
+            background: #ebcccc
+        }
+
+        .table-small th {
+            font-weight: normal;
+        }
+
+        .table-small td {
+            font-weight: bold;
+        }
+
+        .scroll-up {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            padding-top: 10px;
+            background: #f0f0f0;
+            display: block;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: './report.json',
+                dataType: "json",
+                success: function (data) {
+                    var pageGroups, issueGroups;
+                    window._report = data;
+
+                    if (data.issues.length || data.abortedRequests.length) {
+                        pageGroups = _.groupBy(data.issues, function (issue) {
+                            return issue.pageUrl;
+                        });
+                        issueGroups = _.groupBy(data.issues, function (issue) {
+                            return issue.resourceUrl;
+                        });
+                        var res = _.template($('#page').html());
+                        $('#view_page').html(res({groups: pageGroups}));
+
+                        var res = _.template($('#issues').html());
+                        $('#view_issues').html(res({groups: issueGroups}));
+
+                        var res = _.template($('#aborted').html());
+                        $('#view_aborted').html(res({resources: data.abortedRequests}));
+
+                        var res = _.template($('#stats').html());
+                        $('aside').html(res({
+                            date: new Date(data.date).toLocaleString(),
+                            target: data.gruntTarget,
+                            cntIssues: data.issues.length,
+                            cntPages: Object.keys(pageGroups).length,
+                            cntResources: Object.keys(issueGroups).length,
+                            cntAborted: data.abortedRequests.length
+                        }));
+
+                    }
+                }
+            }).fail(function () {
+                alert('failed to load report file');
+            });
+        });
+    </script>
+    <script type="text/template" id="stats">
+        <h3>Stats</h3>
+        <table class="table table-small">
+            <tr>
+                <th>Report date</th>
+                <td><%= date %></td>
+            </tr>
+            <tr>
+                <th>Grunt target</th>
+                <td><%= target %></td>
+            </tr>
+            <tr>
+                <th>Total issues</th>
+                <td><%= cntIssues %></td>
+            </tr>
+            <tr>
+                <th><a href="#by_asset">Distinct assets</a></th>
+                <td><%= cntResources %></td>
+            </tr>
+            <tr>
+                <th><a href="#by_page">Pages with asset issues</a></th>
+                <td><%= cntPages %></td>
+            </tr>
+            <tr>
+                <th><a href="#aborted_requests">Aborted requests</a> <span class="question"
+                                                                           title="Number of requests explicitly disabled during test run">(?)</span>
+                </th>
+                <td><%= cntAborted %></td>
+            </tr>
+        </table>
+    </script>
+    <script type="text/template" id="page">
+
+        <h3>Asset issues, by page</h3>
+        <table class="table table-condensed">
+            <tr>
+                <th>Page URL</th>
+                <th>Assets</th>
+            </tr>
+            <% _.forEach(groups, function(issues, page) { %>
+            <tr>
+                <td><a href="<%= page %>" target="_blank"><%= page %></a> (<%= issues.length %> issues)</td>
+                <td>
+                    <% _.forEach(issues, function(issue) { %>
+                        <span class="status question" title="<%= issue.errorCode %> (<%= issue.errorType %>) -- <%= issue.message %>"><%= issue.errorCode %> (<%= issue.errorType %>)</span>:
+                    <a href="<%= issue.resourceUrl %>" target="_blank"><%= issue.resourceUrl %></a> <br>
+                    <% }); %>
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    </script>
+    <script type="text/template" id="issues">
+        <h3>Pages, by asset</h3>
+        <table class="table table-condensed">
+            <tr>
+                <th>Asset URL</th>
+                <th>Referencing pages</th>
+            </tr>
+            <% _.forEach(groups, function(pages, resource) { %>
+            <tr>
+                <td><a href="<%= resource %>" target="_blank"><%= resource %></a> (<%= pages.length %> pages)</td>
+                <td>
+                    <% _.forEach(pages, function(page) { %>
+                    <a href="<%= page.pageUrl %>" target="_blank"><%= page.pageUrl %></a> <br>
+                    <% }); %>
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    </script>
+    <script type="text/template" id="aborted">
+
+        <h3>Aborted requests</h3>
+        <table class="table table-condensed">
+            <tr>
+                <th>Asset URL</th>
+            </tr>
+            <% _.forEach(resources, function(resource) { %>
+            <tr>
+                <td><a href="<%= resource %>" target="_blank"><%= resource.resourceUrl %></a></td>
+            </tr>
+            <% }); %>
+        </table>
+    </script>
+
+</head>
+<body>
+<a class="scroll-up" href="#">&#128316;</a>
+
+<h1>Missingassetchecker report</h1>
+<aside></aside>
+<a name="by_asset"></a>
+<section id="view_issues"></section>
+<a name="by_page"></a>
+<section id="view_page"></section>
+<a name="aborted_requests"></a>
+<section id="view_aborted"></section>
+</body>
+</html>
