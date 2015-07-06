@@ -34,22 +34,7 @@ grunt.initConfig({
   },
 })
 ```
-
-### Options
-
-#### options.url
-Type: `String`
-Default value: `'http://localhost:9000`
-
-A string value that is used to start browsing and check for errors
-
-#### options.issues
-Type: `Array`
-Default value: `['networkerror','javascripterror','console']`
-
-An array of values that launch different kinds of tests.
-
-### Usage Examples
+### Configuration and examples
 
 #### Minimal configuration
 In this example, the default options are used to test static html pages hosted on localhost server on port 9000 checking if assets any assets are missing. If there is at least 1 missing asset for the specified pages, grunt task will fail.
