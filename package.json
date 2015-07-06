@@ -1,6 +1,6 @@
 {
   "name": "grunt-missingassetchecker",
-  "description": "Grunt task checking if Web-page(s) is missing assets or assets is not available.",
+  "description": "Grunt task, which helps to find missing assets in web-application. Generates JSON+HTML reports and screenshots.",
   "version": "0.2.0",
   "homepage": "https://github.com/lcalvy/grunt-missingassetchecker",
   "author": {
