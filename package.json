@@ -1,12 +1,16 @@
 {
   "name": "grunt-missingassetchecker",
-  "description": "Grunt task checking if web application is missing assets or assets is not available.",
-  "version": "0.1.4",
+  "description": "Grunt task checking if Web-page(s) is missing assets or assets is not available.",
+  "version": "0.2.0",
   "homepage": "https://github.com/lcalvy/grunt-missingassetchecker",
   "author": {
     "name": "Loic Calvy",
     "email": "calvy@ekino.com"
   },
+  "contributors": [{
+      "name": "Vitaly Grinko",
+      "email": "vitalygrinko@gmail.com"
+    }],
   "repository": {
     "type": "git",
     "url": "git://github.com/lcalvy/grunt-missingassetchecker.git"

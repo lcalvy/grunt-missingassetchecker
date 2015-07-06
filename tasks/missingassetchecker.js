@@ -14,21 +14,21 @@ var async = require('async');
 
 module.exports = function (grunt) {
 
-    // Please see the Grunt documentation for more information regarding task
-    // creation: http://gruntjs.com/creating-tasks
-
     grunt.registerMultiTask('missingassetchecker', 'Check if app is missing assets or assets are not available.', function () {
         var done = this.async();
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
             url: undefined, // @deprecated
-            urls: ['https://www.google.com/'],
-            issues: ['networkerror', 'javascripterror', 'console'],
+            "urls": [
+                'https://localhost:9000/product-page1.html',
+                'https://localhost:9000/product-page2.html'
+            ],
+            issues: ['networkerror'], // 'javascripterror', 'console'
             failThreshold: 0,
             resourceFilter: function (resourceUrl) {
                 return true;
             },
-            report: false,
+            report: 'reports/missingassetchecker',
             screenshots: false,
             phantom: {
                 maxOpenPages: 5,
@@ -71,9 +71,9 @@ module.exports = function (grunt) {
         var q = async.queue(function (task, callback) {
             grunt.log.subhead('Starting missingassetchecker to', task.pageUrl);
             phantomlauncher.launch(options, task.pageUrl, function (stdout, stderr, abortedRequests) {
+                var isOK = true;
                 grunt.verbose.writeln("stdout :", JSON.stringify(stdout, null, '\t'));
                 grunt.verbose.writeln("stderr :", JSON.stringify(stderr, null, '\t'));
-                var isOK = true;
                 grunt.verbose.writeln("*********", stdout, "to contact", task.pageUrl);
 
                 for (var i = (options.issues).length - 1; i >= 0; i--) {
@@ -120,6 +120,8 @@ module.exports = function (grunt) {
             //var isOk = resolvedWith.reduce(function (previousValue, currentValue) {
             //    return previousValue && currentValue
             //});
+
+            //failing depending on threshold
             grunt.log.writeln('Total issues found:' + rollUpReportData.issues.length);
             grunt.log.writeln('Failure threshold:' + options.failThreshold);
             isOk = (rollUpReportData.issues.length <= options.failThreshold);

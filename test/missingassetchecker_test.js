@@ -26,6 +26,7 @@ var stdparser = require('../lib/stdparser.js').init(grunt);
 
 function bakeOptions(urls, screenshots) {
     return {
+        issues: ['networkerror'], // 'javascripterror', 'console'
         urls: urls,
         resourceFilter: function () {
             return true;
@@ -100,14 +101,14 @@ exports.missingassetchecker = {
     // @see https://github.com/sgentle/phantomjs-node/issues/287
     //test_javascripterror: function (test) {
     //    test.expect(1);
-    //
+    //    var options = bakeOptions(['http://localhost:9999/javascripterror.html']);
     //    phantomlauncher.launch(options,
-    //        'http://localhost:9999/javascripterror.html',
+    //        options.urls[0],
     //        function (stdout, stderr, abortedRequests) {
     //            test.ok(stdparser.containstype(stderr, "javascripterror"), 'one javascript error');
     //            test.done();
     //        });
-    //},
+    //}
     //test_console: function (test) {
     //    test.expect(1);
     //
