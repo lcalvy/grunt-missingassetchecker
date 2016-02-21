@@ -7,10 +7,12 @@
     "name": "Loic Calvy",
     "email": "calvy@ekino.com"
   },
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Vitaly Grinko",
       "email": "vitalygrinko@gmail.com"
-    }],
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/lcalvy/grunt-missingassetchecker.git"
@@ -40,7 +42,7 @@
     "express": "~3.3.8"
   },
   "peerDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": ">=0.4.0"
   },
   "keywords": [
     "gruntplugin"
